@@ -1,51 +1,44 @@
-# Copyright (c) Streamlit Inc. (2018-2022) Snowflake Inc. (2022)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
+import streamlit_authenticator as stauth
 import streamlit as st
-from streamlit.logger import get_logger
+import yaml
+from yaml.loader import SafeLoader
 
-LOGGER = get_logger(__name__)
+with open('config.yaml') as file: #opening data file with user information
+    config = yaml.load(file, Loader=SafeLoader)
 
+authenticator = stauth.Authenticate( #setting up cookies
+    config['credentials'],
+    config['cookie']['name'],
+    config['cookie']['key'],
+    config['cookie']['expiry_days'],
+    config['preauthorized']
+)
 
-def run():
-    st.set_page_config(
-        page_title="Hello",
-        page_icon="👋",
-    )
+authenticator.login()
 
-    st.write("# Welcome to Streamlit! 👋")
+if st.session_state["authentication_status"]: #if the user is authenticated currently
+    authenticator.logout() #logout button
+elif st.session_state["authentication_status"] is False: # if incorrect password/username inputed when clicking login
+    st.error('Username/password is incorrect')
+elif st.session_state["authentication_status"] is None: #if fields login fields are empty
+    st.warning('Please enter your username and password')
 
-    st.sidebar.success("Select a demo above.")
-
-    st.markdown(
-        """
-        Streamlit is an open-source app framework built specifically for
-        Machine Learning and Data Science projects.
-        **👈 Select a demo from the sidebar** to see some examples
-        of what Streamlit can do!
-        ### Want to learn more?
-        - Check out [streamlit.io](https://streamlit.io)
-        - Jump into our [documentation](https://docs.streamlit.io)
-        - Ask a question in our [community
-          forums](https://discuss.streamlit.io)
-        ### See more complex demos
-        - Use a neural net to [analyze the Udacity Self-driving Car Image
-          Dataset](https://github.com/streamlit/demo-self-driving)
-        - Explore a [New York City rideshare dataset](https://github.com/streamlit/demo-uber-nyc-pickups)
-    """
-    )
+if st.session_state["authentication_status"]: #if the user is authenticated currently
+    #do stuff here
+    st.write(f'Welcome *{st.session_state["name"]}* to comp 370 project')
+    st.title("Temperory header")
+    st.write('your username is: ' + st.session_state["username"])
+    st.write('your email is: '+config['credentials']['usernames'][st.session_state["username"]]['email'])
+    st.write('you currently have: '+str(config['credentials']['usernames'][st.session_state["username"]]['points']) + ' points')
 
 
-if __name__ == "__main__":
-    run()
+else: #registration for the website
+    try:
+        email_of_registered_user, username_of_registered_user, name_of_registered_user = authenticator.register_user(preauthorization=False)
+        if email_of_registered_user:
+            st.success('User registered successfully')
+    except Exception as e:
+        st.error(e)
+
+with open('config.yaml', 'w') as file:
+    yaml.dump(config, file, default_flow_style=False)
