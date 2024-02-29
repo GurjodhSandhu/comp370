@@ -16,5 +16,11 @@ credentials:
       name: Gurjodh
       password: $2b$12$qm81dmWTRzn31cjGcvzy1e4G3ylY2HbMmvYaZfhf.TP5vh/o19d7m
       points: 4
+    testing3:
+      email: gurjodhtest3@gmail.com
+      logged_in: false
+      name: Gurjodh
+      password: $2b$12$Md0nKoRxLBDOtwtEoEo4Z.BILqIyx/BFgg3.DkhJpo8I.9xfDvcO2
+      points: 0
 preauthorized:
   emails: null
