@@ -1,0 +1,20 @@
+cookie:
+  expiry_days: 0
+  key: some_signature_key
+  name: some_cookie_name
+credentials:
+  usernames:
+    gurjodh:
+      email: gurjodhtest@gmail.com
+      logged_in: false
+      name: Gurjodh
+      password: $2b$12$TSp8Ou8SMgkitnT7IWTCJeykFNUMrB0KtfdfW/NwZM/PyuEwEh7au
+      points: 5
+    testing2:
+      email: gurjodhtest2@gmail.com
+      logged_in: false
+      name: Gurjodh
+      password: $2b$12$qm81dmWTRzn31cjGcvzy1e4G3ylY2HbMmvYaZfhf.TP5vh/o19d7m
+      points: 4
+preauthorized:
+  emails: null
