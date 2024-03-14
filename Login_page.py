@@ -2,6 +2,7 @@ import streamlit_authenticator as stauth
 import streamlit as st
 import yaml
 from yaml.loader import SafeLoader
+
 with open('config.yaml') as file: #opening data file with user information
     config = yaml.load(file, Loader=SafeLoader)
 
@@ -16,7 +17,8 @@ authenticator = stauth.Authenticate( #setting up cookies
 authenticator.login()
 
 if st.session_state["authentication_status"]: #if the user is authenticated currently
-    authenticator.logout() #logout button
+    with st.sidebar:
+        authenticator.logout() #logout button
 elif st.session_state["authentication_status"] is False: # if incorrect password/username inputed when clicking login
     st.error('Username/password is incorrect')
 elif st.session_state["authentication_status"] is None: #if fields login fields are empty
@@ -32,10 +34,11 @@ if st.session_state["authentication_status"]:
 if st.session_state["authentication_status"]: #if the user is authenticated currently
     #do stuff here
     st.write(f'Welcome *{st.session_state["name"]}* to comp 370 project')
-    st.title("Temperory header")
+    st.title("HOME PAGE")
     st.write('your username is: ' + username)
     st.write('your email is: '+config['credentials']['usernames'][username]['email'])
-    st.write('you currently have: '+str(config['credentials']['usernames'][username]['points']) + ' points')
+    st.sidebar.write('you currently have: '+str(config['credentials']['usernames'][username]['points']) + ' points')
+    st.sidebar.write(username + " badge_here")
 
 else: #registration for the website
     try:
