@@ -1,26 +1,26 @@
 cookie:
-  expiry_days: 0
+  expiry_days: 30
   key: some_signature_key
   name: some_cookie_name
 credentials:
   usernames:
+    alisha:
+      email: Alishatest@gmail.com
+      logged_in: false
+      name: Alisha
+      password: $2b$12$JNwdN.72cOKTN26Tqtd35.k8ETb2RmlpLgc3ZsYk7plqTQ.4AJnfC
+      points: 25
     gurjodh:
-      email: gurjodhtest@gmail.com
+      email: Gurjodhtest@gmail.com
       logged_in: false
       name: Gurjodh
-      password: $2b$12$TSp8Ou8SMgkitnT7IWTCJeykFNUMrB0KtfdfW/NwZM/PyuEwEh7au
+      password: $2b$12$pEdBh121Q6ylKI34tpncv.Tpvo4L62no.kNBkXb17Crevg/0SgTa2
       points: 5
-    testing2:
-      email: gurjodhtest2@gmail.com
-      logged_in: false
-      name: Gurjodh
-      password: $2b$12$qm81dmWTRzn31cjGcvzy1e4G3ylY2HbMmvYaZfhf.TP5vh/o19d7m
-      points: 4
-    testing3:
-      email: gurjodhtest3@gmail.com
-      logged_in: false
-      name: Gurjodh
-      password: $2b$12$Md0nKoRxLBDOtwtEoEo4Z.BILqIyx/BFgg3.DkhJpo8I.9xfDvcO2
-      points: 0
+    jasdeep:
+      email: Jasdeeptest@gmail.com
+      logged_in: true
+      name: Jasdeep
+      password: $2b$12$LBmlhW6JJzVmBRP.r3JZv.lsbeS7D7fwdR0.olYZBMJfC7lYDevMS
+      points: 55
 preauthorized:
   emails: null
