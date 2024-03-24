@@ -5,22 +5,38 @@ cookie:
 credentials:
   usernames:
     alisha:
-      email: Alishatest@gmail.com
+      email: alishatest@gmail.com
       logged_in: false
-      name: Alisha
-      password: $2b$12$JNwdN.72cOKTN26Tqtd35.k8ETb2RmlpLgc3ZsYk7plqTQ.4AJnfC
-      points: 25
+      name: alisha
+      ownedbadges:
+      - 0
+      password: $2b$12$TAeJ28Desd5US6Lmu0RbVurVLmC0ci7Sjemtr7FU99hmddiXGm3tq
+      points: 20
+      selectbadgeid: 0
     gurjodh:
       email: Gurjodhtest@gmail.com
-      logged_in: false
-      name: Gurjodh
-      password: $2b$12$pEdBh121Q6ylKI34tpncv.Tpvo4L62no.kNBkXb17Crevg/0SgTa2
-      points: 5
-    jasdeep:
-      email: Jasdeeptest@gmail.com
       logged_in: true
-      name: Jasdeep
-      password: $2b$12$LBmlhW6JJzVmBRP.r3JZv.lsbeS7D7fwdR0.olYZBMJfC7lYDevMS
-      points: 55
+      name: Gurjodh
+      ownedbadges:
+      - 3
+      - 4
+      - 7
+      - 2
+      - 1
+      - 5
+      password: $2b$12$pEdBh121Q6ylKI34tpncv.Tpvo4L62no.kNBkXb17Crevg/0SgTa2
+      points: 0
+      selectbadgeid: 7
+    jasdeep:
+      email: jasdeeptest@gmail.com
+      logged_in: false
+      name: jasdeep
+      ownedbadges:
+      - 0
+      - 1
+      - 7
+      password: $2b$12$XQoWTTZCHAXSdH1WLXeDUeOkktzF9bYdY.sOHsyDMufkQ0eHc.cni
+      points: 420
+      selectbadgeid: 0
 preauthorized:
   emails: null
