@@ -3,6 +3,38 @@ import streamlit as st
 import yaml
 from yaml.loader import SafeLoader
 
+def addpoint(points): #function to add points to user
+    config['credentials']['usernames'][username]['points'] += points
+def removepoint(points): #function to remove points from user
+    config['credentials']['usernames'][username]['points'] -= points
+    if config['credentials']['usernames'][username]['points'] < 0:
+        config['credentials']['usernames'][username]['points'] = 0
+
+def badgeidtoimage(id):
+        if id == 0:
+            image = "👨"
+        if id == 1:
+            image = "👩‍💻"
+
+        if id == 2:
+            image = "👨‍💻"
+
+        if id == 3:
+            image = "👨‍🎤"
+
+        if id == 4:
+            image = "👩‍🎤"
+
+        if id == 5:
+            image = "👨‍🎓"
+
+        if id == 6:
+            image = "👩‍🎓"
+
+        if id == 7:
+            image = "🧙"
+
+        return image
 with open('config.yaml') as file: #opening data file with user information
     config = yaml.load(file, Loader=SafeLoader)
 
@@ -31,12 +63,133 @@ if st.session_state["authentication_status"]:
     if 'points' not in config['credentials']['usernames'][username]:
         config['credentials']['usernames'][username]['points'] = 1 #set users point balance to 1
 
-if st.session_state["authentication_status"]: #if the user is authenticated currently
-    #do stuff here
-    st.write(f'Welcome *{st.session_state["name"]}* Shop section')
-    st.title("Shop header")
-    st.header('you currently have: '+str(config['credentials']['usernames'][username]['points']) + ' points')
-    st.sidebar.write('you currently have: '+str(config['credentials']['usernames'][username]['points']) + ' points')
+
+
+
+#---------------------------------------page code start---------------------------------------------------------------------------------
+if st.session_state["authentication_status"]:
+    pointbalance = str(config['credentials']['usernames'][username]['points'])
+
+    st.write(f'Welcome *{st.session_state["name"]}* Shop section')      #front end (main page)
+    st.title("Shop header")                                             #front-end title (main page)
+    st.header('you currently have: '+ pointbalance + ' points')         #front end displaying point balance (main page)
+
+    # sidebar code
+    badge = badgeidtoimage(
+        config['credentials']['usernames'][username]['selectbadgeid'])
+
+    st.sidebar.write(badge + username)                                       #front-end side bar to display badge
+    st.sidebar.write('you currently have: ' + str(pointbalance) + ' points') #front-end display the current points
+
+
+    st.write("👩‍💻 costs 20 points")                                         #front end to display the badge information and cost
+
+    if st.button(label="Buy 👩‍💻", key="item1"): #front end - buy button with label buy and badge
+        cost = 20
+        id = 1
+        if (config['credentials']['usernames'][username]['points'] - cost < 0):
+            st.write("insufficient funds")                                  #front end - display a message if user cant afford badge
+            id = -1
+        if id in config['credentials']['usernames'][username]['ownedbadges']:
+            st.write("you already own this badge")                          #front end - display a message if user already owns this badge
+        elif(id != -1):
+            removepoint(cost)
+
+            st.write("bought") #front end write out a confirmation message
+
+            config['credentials']['usernames'][username]['ownedbadges'].append(id)
+
+#repeat for each if statement
+    st.write("👨‍💻 costs 20 points")
+    if st.button(label="Buy 👨‍💻", key="item2"):
+        cost = 20
+        id = 2
+        if (config['credentials']['usernames'][username]['points'] - cost < 0):
+            st.write("insufficient funds")
+            id = -1
+        if id in config['credentials']['usernames'][username]['ownedbadges']:
+            st.write("you already own this badge")
+        elif (id != -1):
+            removepoint(cost)
+            st.write("bought")
+            config['credentials']['usernames'][username]['ownedbadges'].append(id)
+
+    st.write("👨‍🎤 costs 20 points")
+    if st.button(label="Buy 👨‍🎤", key="item3"):
+        cost = 20
+        id = 3
+        if (config['credentials']['usernames'][username]['points'] - cost < 0):
+            st.write("insufficient funds")
+            id = -1
+        if id in config['credentials']['usernames'][username]['ownedbadges']:
+            st.write("you already own this badge")
+        elif (id != -1):
+            removepoint(cost)
+            st.write("bought")
+            config['credentials']['usernames'][username]['ownedbadges'].append(id)
+
+    st.write("👩‍🎤 costs 20 points")
+    if st.button(label="Buy 👩‍🎤", key="item4"):
+        cost = 20
+        id = 4
+        if (config['credentials']['usernames'][username]['points'] - cost < 0):
+            st.write("insufficient funds")
+            id = -1
+        if id in config['credentials']['usernames'][username]['ownedbadges']:
+            st.write("you already own this badge")
+        elif (id != -1):
+            removepoint(cost)
+            st.write("bought")
+            config['credentials']['usernames'][username]['ownedbadges'].append(id)
+
+    st.write("👨‍🎓 costs 20 points")
+    if st.button(label="Buy 👨‍🎓", key="item5"):
+        cost = 20
+        id = 5
+        if (config['credentials']['usernames'][username]['points'] - cost < 0):
+            st.write("insufficient funds")
+            id = -1
+        if id in config['credentials']['usernames'][username]['ownedbadges']:
+            st.write("you already own this badge")
+        elif (id != -1):
+            removepoint(cost)
+            st.write("bought")
+            config['credentials']['usernames'][username]['ownedbadges'].append(id)
+
+    st.write("👩‍🎓 costs 20 points")
+    if st.button(label="Buy 👩‍🎓", key="item6"):
+        cost = 20
+        id = 6
+        if (config['credentials']['usernames'][username]['points'] - cost < 0):
+            st.write("insufficient funds")
+            id = -1
+        if id in config['credentials']['usernames'][username]['ownedbadges']:
+            st.write("you already own this badge")
+        elif (id != -1):
+            removepoint(cost)
+            st.write("bought")
+            config['credentials']['usernames'][username]['ownedbadges'].append(id)
+
+    st.write("🧙 costs 20 points")
+    if st.button(label="Buy 🧙", key="item7"):
+        cost = 20
+        id = 7
+        if (config['credentials']['usernames'][username]['points'] - cost < 0):
+            st.write("insufficient funds")
+            id = -1
+        if id in config['credentials']['usernames'][username]['ownedbadges']:
+            st.write("you already own this badge")
+        elif (id != -1):
+            removepoint(cost)
+            st.write("bought")
+            config['credentials']['usernames'][username]['ownedbadges'].append(id)
+
+
+#---------------------------------------page code end---------------------------------------------------------------------------------
+
+
+
+
 
 
 #code for login
@@ -45,6 +198,10 @@ else: #registration for the website
         email_of_registered_user, username_of_registered_user, name_of_registered_user = authenticator.register_user(preauthorization=False)
         if email_of_registered_user:
             st.success('User registered successfully')
+            config['credentials']['usernames'][username_of_registered_user]['points'] = 20
+            config['credentials']['usernames'][username_of_registered_user]['ownedbadges'] = [0]
+            config['credentials']['usernames'][username_of_registered_user]['selectbadgeid'] = 0
+
 
     except Exception as e:
         st.error(e)
@@ -52,3 +209,4 @@ else: #registration for the website
 
 with open('config.yaml', 'w') as file:
     yaml.dump(config, file, default_flow_style=False)
+
