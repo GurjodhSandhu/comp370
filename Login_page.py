@@ -1,7 +1,40 @@
+import pandas as pd
 import streamlit_authenticator as stauth
 import streamlit as st
 import yaml
 from yaml.loader import SafeLoader
+
+def addpoint(points): #function to add points to user
+    config['credentials']['usernames'][username]['points'] += points
+def removepoint(points): #function to remove points from user
+    config['credentials']['usernames'][username]['points'] -= points
+    if config['credentials']['usernames'][username]['points'] < 0:
+        config['credentials']['usernames'][username]['points'] = 0
+def badgeidtoimage(id):
+        if id == 0:
+            image = "👨"
+        if id == 1:
+            image = "👩‍💻"
+
+        if id == 2:
+            image = "👨‍💻"
+
+        if id == 3:
+            image = "👨‍🎤"
+
+        if id == 4:
+            image = "👩‍🎤"
+
+        if id == 5:
+            image = "👨‍🎓"
+
+        if id == 6:
+            image = "👩‍🎓"
+
+        if id == 7:
+            image = "🧙"
+
+        return image
 
 with open('config.yaml') as file: #opening data file with user information
     config = yaml.load(file, Loader=SafeLoader)
@@ -13,7 +46,6 @@ authenticator = stauth.Authenticate( #setting up cookies
     config['cookie']['expiry_days'],
     config['preauthorized']
 )
-
 authenticator.login()
 
 if st.session_state["authentication_status"]: #if the user is authenticated currently
@@ -31,20 +63,43 @@ if st.session_state["authentication_status"]:
     if 'points' not in config['credentials']['usernames'][username]:
         config['credentials']['usernames'][username]['points'] = 1 #set users point balance to 1
 
+
+
+#--------------------------------page code start ----------------------------------
+
 if st.session_state["authentication_status"]: #if the user is authenticated currently
+    pointbalance = config['credentials']['usernames'][username]['points']  # amount of points a user currently has
+    badge = badgeidtoimage(
+        config['credentials']['usernames'][username]['selectbadgeid'])  # badge user currently has selected
+
     #do stuff here
-    st.write(f'Welcome *{st.session_state["name"]}* to comp 370 project')
+    challenges = pd.read_csv('challenges.csv')
+    #main page code
     st.title("HOME PAGE")
-    st.write('your username is: ' + username)
-    st.write('your email is: '+config['credentials']['usernames'][username]['email'])
-    st.sidebar.write('you currently have: '+str(config['credentials']['usernames'][username]['points']) + ' points')
-    st.sidebar.write(username + " badge_here")
+    st.write(f'Welcome *{st.session_state["name"]}*')
+
+    st.write(f'Challenge #1: :red[*{challenges["Challenge"][0]}*] worth :green[ *{challenges["pointsworth"][0]}*] points status: :red[*{challenges["tracker"][0]}*]/:red[*{challenges["tracker2"][0]}*]')
+    st.write(f'Challenge #2: :red[*{challenges["Challenge"][1]}*] worth :green[ *{challenges["pointsworth"][1]}*] points status: :red[*{challenges["tracker"][1]}*]/:red[*{challenges["tracker2"][1]}*]')
+    st.write(f'Challenge #3: :red[*{challenges["Challenge"][2]}*] worth :green[ *{challenges["pointsworth"][2]}*] points status: :red[*{challenges["tracker"][2]}*]/:red[*{challenges["tracker2"][2]}*]')
+
+    #sidebar code
+    st.sidebar.write(badge + username)
+    st.sidebar.write('you currently have: ' + str(pointbalance) + ' points')
+
+
+
+#--------------------------------page code end ----------------------------------
+
+
 
 else: #registration for the website
     try:
         email_of_registered_user, username_of_registered_user, name_of_registered_user = authenticator.register_user(preauthorization=False)
         if email_of_registered_user:
             st.success('User registered successfully')
+            config['credentials']['usernames'][username_of_registered_user]['points'] = 20
+            config['credentials']['usernames'][username_of_registered_user]['ownedbadges'] = [0]
+            config['credentials']['usernames'][username_of_registered_user]['selectbadgeid'] = 0
 
     except Exception as e:
         st.error(e)
