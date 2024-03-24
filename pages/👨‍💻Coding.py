@@ -3,6 +3,39 @@ import streamlit as st
 import yaml
 from yaml.loader import SafeLoader
 
+def addpoint(points): #function to add points to user
+    config['credentials']['usernames'][username]['points'] += points
+def removepoint(points): #function to remove points from user
+    config['credentials']['usernames'][username]['points'] -= points
+    if config['credentials']['usernames'][username]['points'] < 0:
+        config['credentials']['usernames'][username]['points'] = 0
+def badgeidtoimage(id):
+    if id == 0:
+        image = "👨"
+    if id == 1:
+        image = "👩‍💻"
+
+    if id == 2:
+        image = "👨‍💻"
+
+    if id == 3:
+        image = "👨‍🎤"
+
+    if id == 4:
+        image = "👩‍🎤"
+
+    if id == 5:
+        image = "👨‍🎓"
+
+    if id == 6:
+        image = "👩‍🎓"
+
+    if id == 7:
+        image = "🧙"
+
+    return image
+
+
 with open('config.yaml') as file: #opening data file with user information
     config = yaml.load(file, Loader=SafeLoader)
 
@@ -36,7 +69,13 @@ if st.session_state["authentication_status"]: #if the user is authenticated curr
     st.write(f'Welcome *{st.session_state["name"]}* Coding section')
     st.title("Coding header")
 
-    st.sidebar.write('you currently have: '+str(config['credentials']['usernames'][username]['points']) + ' points')
+    # sidebar code
+    pointbalance = config['credentials']['usernames'][username]['points']  # amount of points a user currently has
+    badge = badgeidtoimage(
+        config['credentials']['usernames'][username]['selectbadgeid'])  # badge user currently has selected
+
+    st.sidebar.write(badge + username)
+    st.sidebar.write('you currently have: ' + str(pointbalance) + ' points')
 
 
 #code for login
@@ -45,6 +84,10 @@ else: #registration for the website
         email_of_registered_user, username_of_registered_user, name_of_registered_user = authenticator.register_user(preauthorization=False)
         if email_of_registered_user:
             st.success('User registered successfully')
+            config['credentials']['usernames'][username_of_registered_user]['points'] = 20
+            config['credentials']['usernames'][username_of_registered_user]['ownedbadges'] = [0]
+            config['credentials']['usernames'][username_of_registered_user]['selectbadgeid'] = 0
+
 
     except Exception as e:
         st.error(e)
@@ -52,3 +95,4 @@ else: #registration for the website
 
 with open('config.yaml', 'w') as file:
     yaml.dump(config, file, default_flow_style=False)
+
