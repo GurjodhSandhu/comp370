@@ -3,6 +3,42 @@ import streamlit as st
 import yaml
 from yaml.loader import SafeLoader
 
+# Title of the website and makes site in widemode and sets the page font to Lilita One
+st.set_page_config(page_title="WebsiteName", layout="wide")
+st.markdown(
+    """
+    <style>
+    [data-testid="stSidebar"][aria-expanded="true"] > div:first-child{
+        width: 400px;
+    }
+    [data-testid="stSidebar"][aria-expanded="false"] > div:first-child{
+        width: 400px;
+        margin-left: -400px;
+    }
+    """,
+
+    unsafe_allow_html=True,
+)
+
+st.markdown("""<style>
+    figure {
+  border: thin #c0c0c0 solid;
+  display: flex;
+  flex-flow: column;
+  max-width: 150px;
+}
+img {
+  max-width: 150px;
+  max-height: 150px;
+}
+figcaption {
+  background-color: #222;
+  color: #fff;
+  font: italic smaller sans-serif;
+  padding: 3px;
+  text-align: center;
+} </style>
+    """,unsafe_allow_html=True)
 def addpoint(points): #function to add points to user
     config['credentials']['usernames'][username]['points'] += points
 def removepoint(points): #function to remove points from user
@@ -65,9 +101,63 @@ if st.session_state["authentication_status"]:
         config['credentials']['usernames'][username]['points'] = 1 #set users point balance to 1
 
 if st.session_state["authentication_status"]: #if the user is authenticated currently
-    #do stuff here
-    st.write(f'Welcome *{st.session_state["name"]}* Coding section')
-    st.title("Coding header")
+    st.markdown(
+        """
+        <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
+        .title-container {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #FFE2E0;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 50px; 
+            margin-top: -105px; 
+            font-family: 'Lilita One', cursive; 
+            color: #FF8C84
+
+        }
+
+        .image-container {
+            margin-left: 20px; /* Adjust the margin to create space between title and image */
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+    st.markdown(
+        '<div class="title-container">BrainyBytes Lab<div class="image-container"><img src="https://png2.cleanpng.com/sh/b01c461b1083058d46fffedf4c4f8b8a/L0KzQYm3VcA1N5RrfZH0aYP2gLBuTfJzaZpzRdZ7YYfsfri0gBxqeF5miuY2NXHocrXqhvEybZRneqY3NUm7RIa4VsYyPWM6TKIBOUezQYO9Ur5xdpg=/kisspng-brain-drawing-clip-art-5aebdcfa1ecbb4.5984516615254069701262.png" width="100"></div> &nbsp &nbsp &nbsp Coding section</div>',
+        unsafe_allow_html=True
+    )
+
+    colm1, colm2 = st.columns(2)
+    with colm1:
+        st.image("images/placehold.png", caption="Placeholder Game")
+        with st.popover("play"):
+            st.write("Game code here")
+        st.image("images/placehold.png", caption="placeholder Game")
+        with st.popover("play"):
+            st.write("Game code here")
+        st.image("images/placehold.png", caption="placeholder Game")
+        with st.popover("play"):
+            st.write("Game code here")
+
+    with colm2:
+        st.image("images/placehold.png", caption="placeholder Game")
+        with st.popover("play"):
+            st.write("Game code here")
+        st.image("images/placehold.png", caption="placeholder Game")
+        with st.popover("play"):
+            st.write("Game code here")
+        st.image("images/placehold.png", caption="placeholder Game")
+        with st.popover("play"):
+            st.write("Game code here")
+
+
+
+
+
 
     # sidebar code
     pointbalance = config['credentials']['usernames'][username]['points']  # amount of points a user currently has
@@ -95,4 +185,5 @@ else: #registration for the website
 
 with open('config.yaml', 'w') as file:
     yaml.dump(config, file, default_flow_style=False)
+
 
