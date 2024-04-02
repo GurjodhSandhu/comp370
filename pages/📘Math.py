@@ -2,8 +2,12 @@ import streamlit_authenticator as stauth
 import streamlit as st
 import yaml
 from yaml.loader import SafeLoader
+import json
 #Title of the website and makes site in widemode and sets the page font to Lilita One
 st.set_page_config(page_title="WebsiteName", layout="wide")
+
+import streamlit as st
+
 
 
 st.markdown("""<style>
@@ -61,6 +65,45 @@ def badgeidtoimage(id):
         image = "🧙"
 
     return image
+
+def multichoicegame(unit,questionfile):
+    gamequestion = open(questionfile)
+    questions = json.load(gamequestion)
+
+    score = 0
+    feedback = []
+    st.title("Math Questionnaire")
+    for i, question in enumerate(questions, 1):
+        st.markdown(f"<span style='font-weight:bold'> Question {i}:  {question['question']}</span>", unsafe_allow_html=True)
+        if len(question['correct_answers']) > 1:
+            user_answers = []
+            for option in question['options']:
+                if st.checkbox(option, key=f'{unit}{i}{option}'):
+                    user_answers.append(option)
+        else:
+            user_answer = st.radio("", question['options'], key=f'{unit}Unit1{i}')
+        if len(question['correct_answers']) > 1:
+            if set(user_answers) == set(question['correct_answers']):
+                score += 1
+                feedback.append("That is Correct✅")
+            else:
+                feedback.append("That is Wrong ❌")
+        else:
+            if user_answer == question['correct_answers'][0]:
+                score += 1
+                feedback.append("That is Correct✅")
+            else:
+                feedback.append("That is Wrong ❌")
+    if st.button("SUBMIT",key=unit):
+        st.write("Game Results :")
+        for i, fb in enumerate(feedback, 1):
+            st.write(f"Question {i}: {fb}")
+
+        percentage = (score/len(question))
+        st.write(f"Score final : {score}/{len(questions)}")
+        pointsgained = round(percentage/10)
+        st.write(f"You gained :red[ {pointsgained}] points")
+        addpoint(pointsgained)
 
 
 with open('config.yaml') as file: #opening data file with user information
@@ -124,29 +167,33 @@ if st.session_state["authentication_status"]: #if the user is authenticated curr
 
     colm1 , colm2 = st.columns(2)
     with colm1:
-        st.image("images/Ratiogame.jpg", caption="Ratio Game")
+        st.image("images/Ratiogame.jpg", caption="Ratio Game") #game1
         with st.popover("play"):
-            st.write("Game code here")
-        st.image("images/placehold.png", caption="Ratio Game")
+            multichoicegame('unit1','math_unit1_questions.json')
+
+        st.image("images/AlgebraGame.jpg", caption="Algebra Game") #game3
         with st.popover("play"):
-            st.write("Game code here")
-        st.image("images/placehold.png", caption="Ratio Game")
+            multichoicegame('unit3','math_unit3_questions.json')
+        st.image("images/placehold.png", caption="Placeholder Game") #game5
         with st.popover("play"):
             st.write("Game code here")
 
     with colm2:
+        st.image("images/NegativeNumbers.jpg", caption="Negative Numbers Game") #game1
+        with st.popover("play"): #game2 negative numbers
+
+            multichoicegame('unit2','math_unit2_questions.json')
+
+        st.image("images/placehold.png", caption="Placeholder Game")
+        with st.popover("play"): #game4
+            st.write("Game code here")
+
         st.markdown("""<figure>
-          <img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="Elephant at sunset" />
-            <figcaption>Ratio Game</figcaption>
-            </figure>
-        """, unsafe_allow_html=True)
-        with st.popover("play"):
-            st.write("Game code here")
-        st.image("images/placehold.png", caption="Ratio Game")
-        with st.popover("play"):
-            st.write("Game code here")
-        st.image("images/placehold.png", caption="Ratio Game")
-        with st.popover("play"):
+                  <img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="Elephant at sunset" />
+                    <figcaption>Ratio Game</figcaption>
+                    </figure>
+                """, unsafe_allow_html=True)
+        with st.popover("play"): #game6
             st.write("Game code here")
 
 
@@ -178,3 +225,4 @@ else: #registration for the website
 
 with open('config.yaml', 'w') as file:
     yaml.dump(config, file, default_flow_style=False)
+
