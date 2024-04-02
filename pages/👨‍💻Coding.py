@@ -41,7 +41,7 @@ def multichoicegame(unit,questionfile):
 
         percentage = (score/len(question))
         st.write(f"Score final : {score}/{len(questions)}")
-        pointsgained = round(percentage/10)
+        pointsgained = round(score)
         st.write(f"You gained :red[ {pointsgained}] points")
         addpoint(pointsgained)
 
