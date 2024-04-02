@@ -10,7 +10,6 @@ def removepoint(points): #function to remove points from user
     config['credentials']['usernames'][username]['points'] -= points
     if config['credentials']['usernames'][username]['points'] < 0:
         config['credentials']['usernames'][username]['points'] = 0
-
 def badgeidtoimage(id):
         if id == 0:
             image = "👨"
@@ -36,6 +35,7 @@ def badgeidtoimage(id):
             image = "🧙"
 
         return image
+
 with open('config.yaml') as file: #opening data file with user information
     config = yaml.load(file, Loader=SafeLoader)
 
@@ -91,6 +91,14 @@ if st.session_state["authentication_status"]:
         .image-container {
             margin-left: 20px; /* Adjust the margin to create space between title and image */
         }
+        div.stButton > button:first-child {
+            background-color: #FFE2E0;
+            color: black;
+            font-size: 20px;
+            height: 2em;
+            width: 12em;
+            border-radius: 10px 10px 10px 10px;
+        }
         </style>
         """,
         unsafe_allow_html=True
@@ -109,111 +117,117 @@ if st.session_state["authentication_status"]:
     st.sidebar.write(badge + username)                                       #front-end side bar to display badge
     st.sidebar.write('you currently have: ' + str(pointbalance) + ' points') #front-end display the current points
 
-
-    st.write("👩‍💻 costs 20 points")                                         #front end to display the badge information and cost
-
-    if st.button(label="Buy 👩‍💻", key="item1"): #front end - buy button with label buy and badge
-        cost = 20
-        id = 1
-        if (config['credentials']['usernames'][username]['points'] - cost < 0):
-            st.write("insufficient funds")                                  #front end - display a message if user cant afford badge
-            id = -1
-        if id in config['credentials']['usernames'][username]['ownedbadges']:
-            st.write("you already own this badge")                          #front end - display a message if user already owns this badge
-        elif(id != -1):
-            removepoint(cost)
+    colm1, colm2 = st.columns(2)
+    with colm1:
+        st.write("👩‍💻 costs 20 points")                                         #front end to display the badge information and cost
+        if st.button(label="Buy 👩‍💻", key="item1"): #front end - buy button with label buy and badge
+            cost = 20
+            id = 1
+            if (config['credentials']['usernames'][username]['points'] - cost < 0):
+                st.write("insufficient funds")                                  #front end - display a message if user cant afford badge
+                id = -1
+            if id in config['credentials']['usernames'][username]['ownedbadges']:
+                st.write("you already own this badge")                          #front end - display a message if user already owns this badge
+            elif(id != -1):
+                removepoint(cost)
 
             st.write("bought") #front end write out a confirmation message
 
             config['credentials']['usernames'][username]['ownedbadges'].append(id)
 
 #repeat for each if statement
-    st.write("👨‍💻 costs 20 points")
-    if st.button(label="Buy 👨‍💻", key="item2"):
-        cost = 20
-        id = 2
-        if (config['credentials']['usernames'][username]['points'] - cost < 0):
-            st.write("insufficient funds")
-            id = -1
-        if id in config['credentials']['usernames'][username]['ownedbadges']:
-            st.write("you already own this badge")
-        elif (id != -1):
-            removepoint(cost)
-            st.write("bought")
-            config['credentials']['usernames'][username]['ownedbadges'].append(id)
-
-    st.write("👨‍🎤 costs 20 points")
-    if st.button(label="Buy 👨‍🎤", key="item3"):
-        cost = 20
-        id = 3
-        if (config['credentials']['usernames'][username]['points'] - cost < 0):
-            st.write("insufficient funds")
-            id = -1
-        if id in config['credentials']['usernames'][username]['ownedbadges']:
-            st.write("you already own this badge")
-        elif (id != -1):
-            removepoint(cost)
-            st.write("bought")
-            config['credentials']['usernames'][username]['ownedbadges'].append(id)
-
-    st.write("👩‍🎤 costs 20 points")
-    if st.button(label="Buy 👩‍🎤", key="item4"):
-        cost = 20
-        id = 4
-        if (config['credentials']['usernames'][username]['points'] - cost < 0):
-            st.write("insufficient funds")
-            id = -1
-        if id in config['credentials']['usernames'][username]['ownedbadges']:
-            st.write("you already own this badge")
-        elif (id != -1):
-            removepoint(cost)
-            st.write("bought")
-            config['credentials']['usernames'][username]['ownedbadges'].append(id)
-
-    st.write("👨‍🎓 costs 20 points")
-    if st.button(label="Buy 👨‍🎓", key="item5"):
-        cost = 20
-        id = 5
-        if (config['credentials']['usernames'][username]['points'] - cost < 0):
-            st.write("insufficient funds")
-            id = -1
-        if id in config['credentials']['usernames'][username]['ownedbadges']:
-            st.write("you already own this badge")
-        elif (id != -1):
-            removepoint(cost)
-            st.write("bought")
-            config['credentials']['usernames'][username]['ownedbadges'].append(id)
-
-    st.write("👩‍🎓 costs 20 points")
-    if st.button(label="Buy 👩‍🎓", key="item6"):
-        cost = 20
-        id = 6
-        if (config['credentials']['usernames'][username]['points'] - cost < 0):
-            st.write("insufficient funds")
-            id = -1
-        if id in config['credentials']['usernames'][username]['ownedbadges']:
-            st.write("you already own this badge")
-        elif (id != -1):
-            removepoint(cost)
-            st.write("bought")
-            config['credentials']['usernames'][username]['ownedbadges'].append(id)
-
-    st.write("🧙 costs 20 points")
-    if st.button(label="Buy 🧙", key="item7"):
-        cost = 20
-        id = 7
-        if (config['credentials']['usernames'][username]['points'] - cost < 0):
-            st.write("insufficient funds")
-            id = -1
-        if id in config['credentials']['usernames'][username]['ownedbadges']:
-            st.write("you already own this badge")
-        elif (id != -1):
-            removepoint(cost)
-            st.write("bought")
-            config['credentials']['usernames'][username]['ownedbadges'].append(id)
+    with colm2:
+        st.write("👨‍💻 costs 20 points")
+        if st.button(label="Buy 👨‍💻", key="item2"):
+            cost = 20
+            id = 2
+            if (config['credentials']['usernames'][username]['points'] - cost < 0):
+                st.write("insufficient funds")
+                id = -1
+            if id in config['credentials']['usernames'][username]['ownedbadges']:
+                st.write("you already own this badge")
+            elif (id != -1):
+                removepoint(cost)
+                st.write("bought")
+                config['credentials']['usernames'][username]['ownedbadges'].append(id)
+    with colm1:
+        st.write("👨‍🎤 costs 20 points")
+        if st.button(label="Buy 👨‍🎤", key="item3"):
+            cost = 20
+            id = 3
+            if (config['credentials']['usernames'][username]['points'] - cost < 0):
+                st.write("insufficient funds")
+                id = -1
+            if id in config['credentials']['usernames'][username]['ownedbadges']:
+                st.write("you already own this badge")
+            elif (id != -1):
+                removepoint(cost)
+                st.write("bought")
+                config['credentials']['usernames'][username]['ownedbadges'].append(id)
+    with colm1:
+        st.write("👩‍🎤 costs 20 points")
+        if st.button(label="Buy 👩‍🎤", key="item4"):
+            cost = 20
+            id = 4
+            if (config['credentials']['usernames'][username]['points'] - cost < 0):
+                st.write("insufficient funds")
+                id = -1
+            if id in config['credentials']['usernames'][username]['ownedbadges']:
+                st.write("you already own this badge")
+            elif (id != -1):
+                removepoint(cost)
+                st.write("bought")
+                config['credentials']['usernames'][username]['ownedbadges'].append(id)
+    with colm2:
+        st.write("👨‍🎓 costs 20 points")
+        if st.button(label="Buy 👨‍🎓", key="item5"):
+            cost = 20
+            id = 5
+            if (config['credentials']['usernames'][username]['points'] - cost < 0):
+                st.write("insufficient funds")
+                id = -1
+            if id in config['credentials']['usernames'][username]['ownedbadges']:
+                st.write("you already own this badge")
+            elif (id != -1):
+                removepoint(cost)
+                st.write("bought")
+                config['credentials']['usernames'][username]['ownedbadges'].append(id)
+    with colm1:
+        st.write("👩‍🎓 costs 20 points")
+        if st.button(label="Buy 👩‍🎓", key="item6"):
+            cost = 20
+            id = 6
+            if (config['credentials']['usernames'][username]['points'] - cost < 0):
+                st.write("insufficient funds")
+                id = -1
+            if id in config['credentials']['usernames'][username]['ownedbadges']:
+                st.write("you already own this badge")
+            elif (id != -1):
+                removepoint(cost)
+                st.write("bought")
+                config['credentials']['usernames'][username]['ownedbadges'].append(id)
+    with colm2:
+        st.write("🧙 costs 20 points")
+        if st.button(label="Buy 🧙", key="item7"):
+            cost = 20
+            id = 7
+            if (config['credentials']['usernames'][username]['points'] - cost < 0):
+                st.write("insufficient funds")
+                id = -1
+            if id in config['credentials']['usernames'][username]['ownedbadges']:
+                st.write("you already own this badge")
+            elif (id != -1):
+                removepoint(cost)
+                st.write("bought")
+                config['credentials']['usernames'][username]['ownedbadges'].append(id)
 
 
 #---------------------------------------page code end---------------------------------------------------------------------------------
+
+
+
+
+
 
 #code for login
 else: #registration for the website
@@ -232,4 +246,3 @@ else: #registration for the website
 
 with open('config.yaml', 'w') as file:
     yaml.dump(config, file, default_flow_style=False)
-
