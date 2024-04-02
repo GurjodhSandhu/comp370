@@ -160,7 +160,7 @@ if st.session_state["authentication_status"]: #if the user is authenticated curr
 
     colm1, colm2 = st.columns(2)
     with colm1:
-        st.image("images/placehold.png", caption="Data types Game")
+        st.image("images/Datatypes.jpg", caption="Data types Game")
         with st.popover("play"):
             multichoicegame("codeunit1","coding_unit1_questions.json")
         st.image("images/placehold.png", caption="placeholder Game")
