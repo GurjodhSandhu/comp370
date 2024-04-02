@@ -171,20 +171,48 @@ if st.session_state["authentication_status"]: #if the user is authenticated curr
             st.write("Game code here")
 
     with colm2:
+        st.image("images/codinginterface.jpg", caption="Coding Interface")
+        with st.popover("play"):
+            def run_code(code):
+                # function to execute the provided code
+                if code.strip():  # Check if code is not empty
+                    # Redirect to print output
+                    import sys
+                    from io import StringIO
+
+                    old_stdout = sys.stdout
+                    redirected_output = sys.stdout = StringIO()
+
+                    try:
+                        exec(code)
+                        output = redirected_output.getvalue()
+                        st.code(output, language='python')  # Display the output
+                    finally:
+                        sys.stdout = old_stdout
+                else:
+                    st.warning("Please enter some code.")
+
+
+            def main():
+                st.title("Coding Interface")
+
+                # Text area for code input
+                default_code = "print('Hello, World!')"  # Default code
+                code = st.text_area("Enter your code here:", value=default_code, height=1000)
+
+                # Button to run the code
+                if st.button("Run"):
+                    run_code(code)
+
+
+            if __name__ == "__main__":
+                main()
         st.image("images/placehold.png", caption="placeholder Game")
         with st.popover("play"):
             st.write("Game code here")
         st.image("images/placehold.png", caption="placeholder Game")
         with st.popover("play"):
             st.write("Game code here")
-        st.image("images/placehold.png", caption="placeholder Game")
-        with st.popover("play"):
-            st.write("Game code here")
-
-
-
-
-
 
     # sidebar code
     pointbalance = config['credentials']['usernames'][username]['points']  # amount of points a user currently has
