@@ -3,44 +3,16 @@ import streamlit as st
 import yaml
 from yaml.loader import SafeLoader
 import json
+import streamlit.components.v1 as components
 #Title of the website and makes site in widemode and sets the page font to Lilita One
-st.set_page_config(page_title="WebsiteName", layout="wide")
-
-import streamlit as st
-
-
-
-st.markdown("""<style>
-    figure {
-  border: thin #c0c0c0 solid;
-  display: flex;
-  flex-flow: column;
-  max-width: 150px;
-}
-img {
-  max-width: 150px;
-  max-height: 150px;
-}
-figcaption {
-  background-color: #222;
-  color: #fff;
-  font: italic smaller sans-serif;
-  padding: 3px;
-  text-align: center;
-} </style>
-    """,unsafe_allow_html=True)
-
-
-
-
-
+st.set_page_config(page_title="BrainyBytes Lab", layout="wide")
 def addpoint(points): #function to add points to user
     config['credentials']['usernames'][username]['points'] += points
 def removepoint(points): #function to remove points from user
     config['credentials']['usernames'][username]['points'] -= points
     if config['credentials']['usernames'][username]['points'] < 0:
         config['credentials']['usernames'][username]['points'] = 0
-def badgeidtoimage(id):
+def badgeidtoimage(id): #function to translate badge id to badge image
     if id == 0:
         image = "👨"
     if id == 1:
@@ -65,46 +37,42 @@ def badgeidtoimage(id):
         image = "🧙"
 
     return image
-
-def multichoicegame(unit,questionfile):
-    gamequestion = open(questionfile)
+def multichoicegame(unit,questionfile): #function to create a math multi choice game
+    gamequestion = open(questionfile) #opens a json file with questions
     questions = json.load(gamequestion)
-
-    score = 0
-    feedback = []
-    st.title("Math Questionnaire")
-    for i, question in enumerate(questions, 1):
-        st.markdown(f"<span style='font-weight:bold'> Question {i}:  {question['question']}</span>", unsafe_allow_html=True)
+    score = 0 #intial score is set to zero
+    feedback = [] #array used to give feed back to user whether they got question right or wrong
+    st.title("Math Questionnaire") #title
+    for i, question in enumerate(questions, 1): #iterate through each question
+        st.markdown(f"<span style='font-weight:bold'> Question {i}:  {question['question']}</span>", unsafe_allow_html=True) #display the question
         if len(question['correct_answers']) > 1:
-            user_answers = []
+            user_answers = [] #user inputs answer via a checkbox
             for option in question['options']:
                 if st.checkbox(option, key=f'{unit}{i}{option}'):
-                    user_answers.append(option)
+                    user_answers.append(option)  #The answer the user selects are stored in user_answers list
         else:
-            user_answer = st.radio("", question['options'], key=f'{unit}Unit1{i}')
-        if len(question['correct_answers']) > 1:
+            user_answer = st.radio("", question['options'], key=f'{unit}Unit1{i}') #if non-multiselect question uses a radio button
+        if len(question['correct_answers']) > 1: #if more then one correct answer
             if set(user_answers) == set(question['correct_answers']):
-                score += 1
-                feedback.append("That is Correct✅")
+                score += 1 #if answer is correct score is incremented
+                feedback.append("That is Correct✅") #feedback is stored as correct
             else:
-                feedback.append("That is Wrong ❌")
+                feedback.append("That is Wrong ❌") #feedback is stored as incorrect
         else:
-            if user_answer == question['correct_answers'][0]:
+            if user_answer == question['correct_answers'][0]: #if only one correct answer
                 score += 1
-                feedback.append("That is Correct✅")
+                feedback.append("That is Correct✅") #feedback is appened
             else:
                 feedback.append("That is Wrong ❌")
-    if st.button("SUBMIT",key=unit):
+    if st.button("SUBMIT",key=unit): #button to submit answers
         st.write("Game Results :")
         for i, fb in enumerate(feedback, 1):
-            st.write(f"Question {i}: {fb}")
+            st.write(f"Question {i}: {fb}") #display feedback
 
-        percentage = (score/len(question))
-        st.write(f"Score final : {score}/{len(questions)}")
-        pointsgained = round(score)
-        st.write(f"You gained :red[ {pointsgained}] points")
-        addpoint(pointsgained)
-
+        st.write(f"Score final : {score}/{len(questions)}") #display final score
+        pointsgained = round(score) #the user gains point equal to they're score
+        st.write(f"You gained :red[ {pointsgained}] points") #display amount of points earned
+        addpoint(pointsgained) #add points to users point balance
 
 with open('config.yaml') as file: #opening data file with user information
     config = yaml.load(file, Loader=SafeLoader)
@@ -144,60 +112,94 @@ if st.session_state["authentication_status"]: #if the user is authenticated curr
             display: flex;
             align-items: center;
             padding: 10px;
-            background-color: #FFE2E0;
+            background-color: #fcc4d4;
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             font-size: 50px; 
             margin-top: -105px; 
             font-family: 'Lilita One', cursive; 
-            color: #FF8C84
+            color: #d33f73;
         }
         .image-container {
             margin-left: 20px; /* Adjust the margin to create space between title and image */
         }
+        
+        div.stButton > Button:first-child {
+            background-color: #FFE2E0;
+            color: black;
+            font-size: 20px;
+            height: 2em;
+            width: 12em;
+            border-radius: 10px 10px 10px 10px;
+        } 
         </style>
         """,
         unsafe_allow_html=True
     )
     # Display header with colored container and image
     st.markdown(
-    '<div class="title-container">BrainyBytes Lab<div class="image-container"><img src="https://png2.cleanpng.com/sh/b01c461b1083058d46fffedf4c4f8b8a/L0KzQYm3VcA1N5RrfZH0aYP2gLBuTfJzaZpzRdZ7YYfsfri0gBxqeF5miuY2NXHocrXqhvEybZRneqY3NUm7RIa4VsYyPWM6TKIBOUezQYO9Ur5xdpg=/kisspng-brain-drawing-clip-art-5aebdcfa1ecbb4.5984516615254069701262.png" width="100"></div> &nbsp &nbsp &nbsp Math section</div>',
-    unsafe_allow_html=True
+        '<div class="title-container">BrainyBytes Lab<div class="image-container"><img src="https://static.vecteezy.com/system/resources/previews/023/092/211/non_2x/cartoon-cute-smart-human-brain-character-waving-vector.jpg" width="100"></div></div>',
+        unsafe_allow_html=True
     )
+     # Creating container for the Math subheader with image
+    st.markdown("""
+        <style>
+        .subheader-container {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #D8EFB0;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 10px;
+            margin-bottom: 10px;
+            font-size: 24px;
+              font-weight: bold;
+                font-family: 'Lilita One', cursive; 
+                color: #98d42c;
+            }
+            .subheader-container img {
+                margin-right: 10px;
+            }
+            </style>
+            """,
+                unsafe_allow_html = True
+                                         )
+      # Display subheader with colored background and image
+    st.markdown(
+        '<div class="subheader-container"><img src="https://cdn-icons-png.freepik.com/512/4720/4720458.png" width="50" height="50"> Welcome To The Number Nook ' + username + '</div>',
+        unsafe_allow_html=True)
 
-    colm1 , colm2 = st.columns(2)
+    colm1 , colm2 = st.columns(2) #creating two column structure for selecting games to play
     with colm1:
-        st.image("images/Ratiogame.jpg", caption="Ratio Game") #game1
-        with st.popover("play"):
-            multichoicegame('unit1','math_unit1_questions.json')
+        st.image("images/Ratiogame.jpg", caption="Ratio Game", width = 300) #display thumbnail for ratio game
+        with st.popover("play"): #create a popover
+            multichoicegame('unit1','math_unit1_questions.json') #multi choice ratio game is playable within popover
 
-        st.image("images/AlgebraGame.jpg", caption="Algebra Game") #game3
+        st.image("images/AlgebraGame.jpg", caption="Algebra Game", width = 300) #display thumbnail for algebra game
         with st.popover("play"):
-            multichoicegame('unit3','math_unit3_questions.json')
-        st.image("images/placehold.png", caption="Placeholder Game") #game5
-        with st.popover("play"):
-            st.write("Game code here")
+            multichoicegame('unit3','math_unit3_questions.json') #play game within popover
+
+        st.image("images/2048.jpg", caption="2048 Game", width = 300) #display thumbnail for 2048 game
+        with st.popover("play"): #create a popover
+            content_url=("https://play2048.co/") #embedded html game is playable in popover
+            #Embed the content using an iframe
+            components.iframe(content_url, width=700, height=1000)
 
     with colm2:
-        st.image("images/NegativeNumbers.jpg", caption="Negative Numbers Game") #game1
-        with st.popover("play"): #game2 negative numbers
-
+        st.image("images/NegativeNumbers.jpg", caption="Negative Numbers Game", width = 300) #display thumbnail for negative numbers game
+        with st.popover("play"): #playable negative numbers in popover
             multichoicegame('unit2','math_unit2_questions.json')
 
-        st.image("images/placehold.png", caption="Placeholder Game")
-        with st.popover("play"): #game4
-            st.write("Game code here")
+        st.image("images/puppypuzzle200.webp", caption="Puppy Puzzle", width = 300)
+        with st.popover("play"): #embedded html game called puppy puzzle
+            content_url2=("https://cdn.htmlgames.com/PuppyPuzzle/")
+            components.iframe(content_url2, width=700, height=1000)
 
-        st.markdown("""<figure>
-                  <img src="https://www.w3schools.com/images/w3schools_green.jpg" alt="Elephant at sunset" />
-                    <figcaption>Ratio Game</figcaption>
-                    </figure>
-                """, unsafe_allow_html=True)
-        with st.popover("play"): #game6
-            st.write("Game code here")
-
-
-
+        st.image("images/sumjong200.webp", caption="sumjong200" , width = 300)
+        with st.popover("play"): #embedded html game called Sumjong
+            content_url3 = ("https://cdn.htmlgames.com/Sumjong/")
+            components.iframe(content_url3, width=700, height=1000)
 
     #sidebar code
     pointbalance = config['credentials']['usernames'][username]['points']  # amount of points a user currently has
@@ -206,7 +208,6 @@ if st.session_state["authentication_status"]: #if the user is authenticated curr
 
     st.sidebar.write(badge + username)
     st.sidebar.write('you currently have: ' + str(pointbalance) + ' points')
-
 
 #code for login
 else: #registration for the website
@@ -218,11 +219,8 @@ else: #registration for the website
             config['credentials']['usernames'][username_of_registered_user]['ownedbadges'] = [0]
             config['credentials']['usernames'][username_of_registered_user]['selectbadgeid'] = 0
 
-
     except Exception as e:
         st.error(e)
 
-
 with open('config.yaml', 'w') as file:
     yaml.dump(config, file, default_flow_style=False)
-
