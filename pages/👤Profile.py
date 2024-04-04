@@ -2,6 +2,7 @@ import streamlit_authenticator as stauth
 import streamlit as st
 import yaml
 from yaml.loader import SafeLoader
+st.set_page_config(page_title="BrainyBytes Lab", layout="wide")
 
 def addpoint(points): #function to add points to user
     config['credentials']['usernames'][username]['points'] += points
@@ -38,6 +39,43 @@ if st.session_state["authentication_status"]:
         config['credentials']['usernames'][username]['points'] = 1 #set users point balance to 1
 
 if st.session_state["authentication_status"]: #if the user is authenticated currently
+    st.markdown(
+        """
+        <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
+        .title-container {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #fcc4d4;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 50px; 
+            margin-top: -105px; 
+            font-family: 'Lilita One', cursive; 
+            color: #d33f73
+
+        }
+        .image-container {
+            margin-left: 20px; /* Adjust the margin to create space between title and image */
+        }
+        div.stButton > Button:first-child {
+            background-color: #FFE2E0;
+            color: black;
+            font-size: 20px;
+            height: 2em;
+            width: 12em;
+            border-radius: 10px 10px 10px 10px;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+    # Display title with colored background and image
+    st.markdown(
+        '<div class="title-container">BrainyBytes Lab<div class="image-container"><img src="https://static.vecteezy.com/system/resources/previews/023/092/211/non_2x/cartoon-cute-smart-human-brain-character-waving-vector.jpg" width="100"></div></div>',
+        unsafe_allow_html=True
+    )
     st.title("Profile Page")
    #function to take a badges image and turn it into the badges id #
     def badgeimagetoid(image):
@@ -85,27 +123,25 @@ if st.session_state["authentication_status"]: #if the user is authenticated curr
 
         return image
 
-    allbadges = ['👩‍💻','👨‍💻','👨‍🎤','👩‍🎤','👨‍🎓','👩‍🎓','🧙']
-    availablebadges = []
-    ownedbadgesid = config['credentials']['usernames'][username]['ownedbadges']
-    for i in ownedbadgesid:
-        availablebadges.append(badgeidtoimage(i))
+    allbadges = ['👩‍💻','👨‍💻','👨‍🎤','👩‍🎤','👨‍🎓','👩‍🎓','🧙'] #current list of available badges
+    availablebadges = [] #create a list of owned badges
+    ownedbadgesid = config['credentials']['usernames'][username]['ownedbadges'] #get list of badges owned by user
+    for i in ownedbadgesid:  #iterate through the owned badges
+        availablebadges.append(badgeidtoimage(i)) #appened the corresponding badge id translated into badge image into list
 
-    option = st.selectbox(
+    option = st.selectbox( #create a select boc
         'Display a Badge',
         (availablebadges))
-    st.write('You selected:', option)
+    st.write('You selected:', option) #user selects from available badges what badge they wish to display
 
    # sidebar code
     pointbalance = config['credentials']['usernames'][username]['points']  # amount of points a user currently has
     badge = badgeidtoimage(
         config['credentials']['usernames'][username]['selectbadgeid'])  # badge user currently has selected
 
-    st.sidebar.write(badge + username)
-    st.sidebar.write('you currently have: ' + str(pointbalance) + ' points')
-
-    config['credentials']['usernames'][username]['selectbadgeid'] = badgeimagetoid(option)
-
+    st.sidebar.write(badge + username) #display badge and username of sidebar
+    st.sidebar.write('you currently have: ' + str(pointbalance) + ' points') #display point balance on sidebar
+    config['credentials']['usernames'][username]['selectbadgeid'] = badgeimagetoid(option) #set the users currecnt badge to the selected badge
 
 if st.session_state["authentication_status"]: #updating user info
     try:
@@ -130,10 +166,8 @@ else: #registration for the website
             config['credentials']['usernames'][username_of_registered_user]['ownedbadges'] = [0]
             config['credentials']['usernames'][username_of_registered_user]['selectbadgeid'] = 0
 
-
     except Exception as e:
         st.error(e)
-
 
 with open('config.yaml', 'w') as file:
     yaml.dump(config, file, default_flow_style=False)
