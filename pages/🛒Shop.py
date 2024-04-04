@@ -2,7 +2,7 @@ import streamlit_authenticator as stauth
 import streamlit as st
 import yaml
 from yaml.loader import SafeLoader
-
+st.set_page_config(page_title="BrainyBytes Lab", layout="wide") #page setup
 
 def addpoint(points): #function to add points to user
     config['credentials']['usernames'][username]['points'] += points
@@ -46,7 +46,6 @@ authenticator = stauth.Authenticate( #setting up cookies
     config['cookie']['expiry_days'],
     config['preauthorized']
 )
-
 #code for login
 authenticator.login()
 if st.session_state["authentication_status"]: #if the user is authenticated currently
@@ -64,13 +63,10 @@ if st.session_state["authentication_status"]:
     if 'points' not in config['credentials']['usernames'][username]:
         config['credentials']['usernames'][username]['points'] = 1 #set users point balance to 1
 
-
-
-
 #---------------------------------------page code start---------------------------------------------------------------------------------
-if st.session_state["authentication_status"]:
-    pointbalance = str(config['credentials']['usernames'][username]['points'])
-    st.markdown(
+if st.session_state["authentication_status"]: #if logged in
+    pointbalance = str(config['credentials']['usernames'][username]['points']) #store users point balance in variable
+    st.markdown( #front-end html code
         """
         <style>
         @import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
@@ -78,16 +74,14 @@ if st.session_state["authentication_status"]:
             display: flex;
             align-items: center;
             padding: 10px;
-            background-color: #FFE2E0;
+            background-color: #fcc4d4;
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             font-size: 50px; 
             margin-top: -105px; 
             font-family: 'Lilita One', cursive; 
-            color: #FF8C84
-
+            color: #d33f73;
         }
-
         .image-container {
             margin-left: 20px; /* Adjust the margin to create space between title and image */
         }
@@ -103,39 +97,61 @@ if st.session_state["authentication_status"]:
         """,
         unsafe_allow_html=True
     )
-    st.markdown(
-        '<div class="title-container">BrainyBytes Lab<div class="image-container"><img src="https://png2.cleanpng.com/sh/b01c461b1083058d46fffedf4c4f8b8a/L0KzQYm3VcA1N5RrfZH0aYP2gLBuTfJzaZpzRdZ7YYfsfri0gBxqeF5miuY2NXHocrXqhvEybZRneqY3NUm7RIa4VsYyPWM6TKIBOUezQYO9Ur5xdpg=/kisspng-brain-drawing-clip-art-5aebdcfa1ecbb4.5984516615254069701262.png" width="100"></div></div>',
-        unsafe_allow_html=True
-    )
-    st.write(f'Welcome *{st.session_state["name"]}* Shop section')      #front end (main page)
-    st.header('you currently have: '+ pointbalance + ' points')         #front end displaying point balance (main page)
-
+    st.markdown('<div class="title-container">BrainyBytes Lab<div class="image-container"><img src="https://static.vecteezy.com/system/resources/previews/023/092/211/non_2x/cartoon-cute-smart-human-brain-character-waving-vector.jpg" width="100"></div></div>',
+        unsafe_allow_html=True)# display Header
     # sidebar code
     badge = badgeidtoimage(
-        config['credentials']['usernames'][username]['selectbadgeid'])
-
+        config['credentials']['usernames'][username]['selectbadgeid']) #translate badge id to image
     st.sidebar.write(badge + username)                                       #front-end side bar to display badge
     st.sidebar.write('you currently have: ' + str(pointbalance) + ' points') #front-end display the current points
+    # Creating container for the Shop subheader with image
 
-    colm1, colm2 = st.columns(2)
-    with colm1:
-        st.write("👩‍💻 costs 20 points")                                         #front end to display the badge information and cost
-        if st.button(label="Buy 👩‍💻", key="item1"): #front end - buy button with label buy and badge
-            cost = 20
-            id = 1
-            if (config['credentials']['usernames'][username]['points'] - cost < 0):
-                st.write("insufficient funds")                                  #front end - display a message if user cant afford badge
+    st.markdown(#html code for frontend
+               """
+            <style>
+            .subheader-container {
+                display: flex;
+                align-items: center;
+                padding: 10px;
+                background-color: #C5E9E3;
+                border-radius: 10px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                margin-top: 20px;
+                font-size: 24px;
+                font-weight: bold;
+                font-family: 'Lilita One', cursive; 
+                color: #65C5B4;
+            }
+            .subheader-container img {
+                margin-right: 10px;
+            }
+            </style>
+            """,
+                unsafe_allow_html = True
+                                         )
+      # Display subheader with colored background and image
+    st.markdown(
+        '<div class="subheader-container"><img src="https://cdn.icon-icons.com/icons2/943/PNG/512/shoppaymentorderbuy-60_icon-icons.com_73867.png" width="50" height="50"> Welcome To The Shop ' + username + '</div>',
+        unsafe_allow_html=True)
+    #--------------------------------------------------Main page code start---------------------------------------------
+    st.header('you currently have: '+ pointbalance + ' points') #front end displaying point balance (main page)
+    colm1, colm2 = st.columns(2) #create to columns to place elements
+    with colm1: #with column 1
+        st.write("👩‍💻 costs 20 points") #front end to display the badge information and cost
+        if st.button(label="Buy 👩‍💻", key="item1"): #front end buy button with label buy and badge
+            cost = 20 #price of badge
+            id = 1 #badge id used to select/display badges
+            if (config['credentials']['usernames'][username]['points'] - cost < 0): #if user does not have enough funds to buy badge
+                st.write("insufficient funds") #front end - display a message if user cant afford badge
                 id = -1
-            if id in config['credentials']['usernames'][username]['ownedbadges']:
-                st.write("you already own this badge")                          #front end - display a message if user already owns this badge
+            if id in config['credentials']['usernames'][username]['ownedbadges']: #if user already owns the badge
+                st.write("you already own this badge") #front end - display a message if user already owns this badge
             elif(id != -1):
-                removepoint(cost)
+                removepoint(cost) #removes the amount the badge costs from users point balance
+            st.write("bought") #front end display a confirmation message
+            config['credentials']['usernames'][username]['ownedbadges'].append(id) #adds badge id to the list of badges the user owns
 
-            st.write("bought") #front end write out a confirmation message
-
-            config['credentials']['usernames'][username]['ownedbadges'].append(id)
-
-#repeat for each if statement
+#repeat for each badge
     with colm2:
         st.write("👨‍💻 costs 20 points")
         if st.button(label="Buy 👨‍💻", key="item2"):
@@ -221,13 +237,7 @@ if st.session_state["authentication_status"]:
                 st.write("bought")
                 config['credentials']['usernames'][username]['ownedbadges'].append(id)
 
-
-#---------------------------------------page code end---------------------------------------------------------------------------------
-
-
-
-
-
+#---------------------------------------Main Page code End---------------------------------------------------------------------------------
 
 #code for login
 else: #registration for the website
@@ -239,10 +249,8 @@ else: #registration for the website
             config['credentials']['usernames'][username_of_registered_user]['ownedbadges'] = [0]
             config['credentials']['usernames'][username_of_registered_user]['selectbadgeid'] = 0
 
-
     except Exception as e:
         st.error(e)
-
 
 with open('config.yaml', 'w') as file:
     yaml.dump(config, file, default_flow_style=False)
