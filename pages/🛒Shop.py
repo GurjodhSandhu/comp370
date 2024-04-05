@@ -3,7 +3,22 @@ import streamlit as st
 import yaml
 from yaml.loader import SafeLoader
 st.set_page_config(page_title="BrainyBytes Lab", layout="wide") #page setup
+page_bg_img = f"""
+<style>
+[data-testid="stAppViewContainer"] > .main {{
+    background-image: url("https://i.postimg.cc/ZRnWGtkq/fun-colorful-line-doodle-seamless-pattern-background-for-children-simple-childish-scribble-backdrop.jpg");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: local];
+}}
+[data-testid="stHeader"] {{
+    background: rgba(0,0,0,0);
+}}
+</style>
+"""
 
+st.markdown(page_bg_img,unsafe_allow_html=True)
 def addpoint(points): #function to add points to user
     config['credentials']['usernames'][username]['points'] += points
 def removepoint(points): #function to remove points from user
@@ -134,10 +149,10 @@ if st.session_state["authentication_status"]: #if logged in
         '<div class="subheader-container"><img src="https://cdn.icon-icons.com/icons2/943/PNG/512/shoppaymentorderbuy-60_icon-icons.com_73867.png" width="50" height="50"> Welcome To The Shop ' + username + '</div>',
         unsafe_allow_html=True)
     #--------------------------------------------------Main page code start---------------------------------------------
-    st.header('you currently have: '+ pointbalance + ' points') #front end displaying point balance (main page)
+    st.header('you currently have: :green['+ pointbalance + '] points') #front end displaying point balance (main page)
     colm1, colm2 = st.columns(2) #create to columns to place elements
     with colm1: #with column 1
-        st.write("👩‍💻 costs 20 points") #front end to display the badge information and cost
+        st.header("👩‍💻 costs :green[20] points") #front end to display the badge information and cost
         if st.button(label="Buy 👩‍💻", key="item1"): #front end buy button with label buy and badge
             cost = 20 #price of badge
             id = 1 #badge id used to select/display badges
@@ -153,7 +168,7 @@ if st.session_state["authentication_status"]: #if logged in
 
 #repeat for each badge
     with colm2:
-        st.write("👨‍💻 costs 20 points")
+        st.header("👨‍💻 costs :green[20] points")
         if st.button(label="Buy 👨‍💻", key="item2"):
             cost = 20
             id = 2
@@ -167,7 +182,7 @@ if st.session_state["authentication_status"]: #if logged in
                 st.write("bought")
                 config['credentials']['usernames'][username]['ownedbadges'].append(id)
     with colm1:
-        st.write("👨‍🎤 costs 20 points")
+        st.header("👨‍🎤 costs :green[20] points")
         if st.button(label="Buy 👨‍🎤", key="item3"):
             cost = 20
             id = 3
@@ -181,7 +196,7 @@ if st.session_state["authentication_status"]: #if logged in
                 st.write("bought")
                 config['credentials']['usernames'][username]['ownedbadges'].append(id)
     with colm1:
-        st.write("👩‍🎤 costs 20 points")
+        st.header("👩‍🎤 costs :green[20] points")
         if st.button(label="Buy 👩‍🎤", key="item4"):
             cost = 20
             id = 4
@@ -195,7 +210,7 @@ if st.session_state["authentication_status"]: #if logged in
                 st.write("bought")
                 config['credentials']['usernames'][username]['ownedbadges'].append(id)
     with colm2:
-        st.write("👨‍🎓 costs 20 points")
+        st.header("👨‍🎓 costs :green[20] points")
         if st.button(label="Buy 👨‍🎓", key="item5"):
             cost = 20
             id = 5
@@ -209,7 +224,7 @@ if st.session_state["authentication_status"]: #if logged in
                 st.write("bought")
                 config['credentials']['usernames'][username]['ownedbadges'].append(id)
     with colm1:
-        st.write("👩‍🎓 costs 20 points")
+        st.header("👩‍🎓 costs :green[20] points")
         if st.button(label="Buy 👩‍🎓", key="item6"):
             cost = 20
             id = 6
@@ -223,7 +238,7 @@ if st.session_state["authentication_status"]: #if logged in
                 st.write("bought")
                 config['credentials']['usernames'][username]['ownedbadges'].append(id)
     with colm2:
-        st.write("🧙 costs 20 points")
+        st.header("🧙 costs :green[20] points")
         if st.button(label="Buy 🧙", key="item7"):
             cost = 20
             id = 7
