@@ -3,7 +3,23 @@ import streamlit as st
 import yaml
 from yaml.loader import SafeLoader
 st.set_page_config(page_title="BrainyBytes Lab", layout="wide")
+#Background Image
+page_bg_img = f"""
+<style>
+[data-testid="stAppViewContainer"] > .main {{
+    background-image: url("https://i.postimg.cc/rw2qQm9T/v935-aum-16.jpg");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: local];
+}}
+[data-testid="stHeader"] {{
+    background: rgba(0,0,0,0);
+}}
+</style>
+"""
 
+st.markdown(page_bg_img,unsafe_allow_html=True)
 def addpoint(points): #function to add points to user
     config['credentials']['usernames'][username]['points'] += points
 def removepoint(points): #function to remove points from user
