@@ -4,6 +4,22 @@ import yaml
 from yaml.loader import SafeLoader
 # Sets page in widemode,specifically allowing header to span across page.
 st.set_page_config(page_title="BrainyBytes Lab", layout="wide")
+#Set background for page
+page_bg_img = f"""
+<style>
+    [data-testid="stAppViewContainer"] > .main {{
+    background-image: url("https://i.postimg.cc/6pBCXcf1/7525967.jpg");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: local];
+}}
+[data-testid="stHeader"] {{
+    background: rgba(0,0,0,0);
+}}
+</style>
+"""
+st.markdown(page_bg_img,unsafe_allow_html=True)
 
 def addpoint(points): #function to add points to user
     config['credentials']['usernames'][username]['points'] += points
@@ -109,8 +125,9 @@ if st.session_state["authentication_status"]: #if the user is authenticated curr
     )
     # Display title with colored background and image
     st.markdown(
-        '<div class="title-container">BrainyBytes Lab<div class="image-container"><img src="https://png2.cleanpng.com/sh/b01c461b1083058d46fffedf4c4f8b8a/L0KzQYm3VcA1N5RrfZH0aYP2gLBuTfJzaZpzRdZ7YYfsfri0gBxqeF5miuY2NXHocrXqhvEybZRneqY3NUm7RIa4VsYyPWM6TKIBOUezQYO9Ur5xdpg=/kisspng-brain-drawing-clip-art-5aebdcfa1ecbb4.5984516615254069701262.png" width="100"></div></div>',
-        unsafe_allow_html=True)
+        '<div class="title-container">BrainyBytes Lab<div class="image-container"><img src="https://static.vecteezy.com/system/resources/previews/023/092/211/non_2x/cartoon-cute-smart-human-brain-character-waving-vector.jpg" width="100"></div></div>',
+        unsafe_allow_html=True
+    )
     #questions for math unit 1 stored in array
     m1cardquestion = ["What is 1 + (-1)", "What is 1 - (-1)", "What is 1 * -1", "What is -1 * -1"]
     #answers for math unit 1 stored in array
@@ -227,6 +244,3 @@ else: #registration for the website
 
 with open('config.yaml', 'w') as file:
     yaml.dump(config, file, default_flow_style=False)
-
-
-
