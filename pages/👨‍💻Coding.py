@@ -59,6 +59,8 @@ def multichoicegame(unit,questionfile):
         pointsgained = round(score)  # the user gains point equal to they're score
         st.write(f"You gained :red[ {pointsgained}] points")  # display amount of points earned
         addpoint(pointsgained)  # add points to users point balance
+        config['credentials']['usernames'][username][
+            'CodeGamesplayed'] += 1  # track number math games played
 
 def addpoint(points): #function to add points to user
     config['credentials']['usernames'][username]['points'] += points
@@ -206,22 +208,6 @@ if st.session_state["authentication_status"]: #if the user is authenticated curr
     with colm2:
         st.image("images/codinginterface.jpg", caption="Coding Interface", width = 300) # display thumbnail for coding interface
         with st.popover("play"):
-            # Set background for page
-            page_bg_img = f"""
-            <style>
-                [data-testid="stAppViewContainer"] > .main {{
-                background-image: url("https://i.postimg.cc/Dzk9yB0c/3175102.jpg");
-                background-size: cover;
-                background-position: center center;
-                background-repeat: no-repeat;
-                background-attachment: local];
-            }}
-            [data-testid="stHeader"] {{
-                background: rgba(0,0,0,0);
-            }}
-            </style>
-            """
-            st.markdown(page_bg_img, unsafe_allow_html=True)
               # Create container for header
             st.markdown(
                      """
@@ -254,10 +240,6 @@ if st.session_state["authentication_status"]: #if the user is authenticated curr
                     """,
                         unsafe_allow_html = True
                                                 )
-            st.markdown(
-                    '<div class="title-container">BrainyBytes Lab<div class="image-container"><img src="https://static.vecteezy.com/system/resources/previews/023/092/211/non_2x/cartoon-cute-smart-human-brain-character-waving-vector.jpg" width="100"></div></div>',
-                    unsafe_allow_html = True
-                                             )
               # Coding Interface
             st.markdown(page_bg_img, unsafe_allow_html=True)
             def run_code(code):
@@ -311,6 +293,9 @@ else: #registration for the website
             config['credentials']['usernames'][username_of_registered_user]['points'] = 20
             config['credentials']['usernames'][username_of_registered_user]['ownedbadges'] = [0]
             config['credentials']['usernames'][username_of_registered_user]['selectbadgeid'] = 0
+            config['credentials']['usernames'][username_of_registered_user]['MathGamesplayed'] = 0
+            config['credentials']['usernames'][username_of_registered_user]['CodeGamesplayed'] = 0
+            config['credentials']['usernames'][username_of_registered_user]['challengesCompletedid'] = [0]
 
     except Exception as e:
         st.error(e)
